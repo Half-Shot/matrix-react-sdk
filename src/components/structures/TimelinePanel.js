@@ -77,6 +77,9 @@ module.exports = React.createClass({
             timelineLoading: true, // track whether our room timeline is loading
             canBackPaginate: true,
             readMarkerEventId: this._getCurrentReadReceipt(),
+
+            backPaginating: false,
+            forwardPaginating: false,
         };
     },
 
@@ -129,8 +132,12 @@ module.exports = React.createClass({
             return q(false);
         }
         debuglog("TimelinePanel: Initiating paginate; backwards:"+backwards);
+        var statekey = backwards ? 'backPaginating' : 'forwardPaginating';
+        this.setState({[statekey]: true});
+
         return this._timelineWindow.paginate(dir, PAGINATE_SIZE).then((r) => {
             debuglog("TimelinePanel: paginate complete backwards:"+backwards+"; success:"+r);
+            this.setState({[statekey]: false});
             this._onTimelineUpdated(r);
             return r;
         });
@@ -449,6 +456,8 @@ module.exports = React.createClass({
         return (
             <MessagePanel ref="messagePanel"
                     hidden={ this.props.hidden }
+                    backPaginating={ this.state.backPaginating }
+                    forwardPaginating={ this.state.forwardPaginating }
                     events={ this.state.events }
                     highlightedEventId={ this.props.highlightedEventId }
                     readMarkerEventId={ this.state.readMarkerEventId }
