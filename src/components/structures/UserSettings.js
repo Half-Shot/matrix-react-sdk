@@ -502,11 +502,25 @@ module.exports = React.createClass({
                 <h3>User Interface</h3>
                 <div className="mx_UserSettings_section">
                     { this._renderUrlPreviewSelector() }
+                    { this._renderLocationSelector() }
                     { SETTINGS_LABELS.map( this._renderSyncedSetting ) }
                     { THEMES.map( this._renderThemeSelector ) }
                 </div>
             </div>
         );
+    },
+
+    _renderLocationSelector: function () {
+      return <div className="mx_UserSettings_toggle">
+          <input id="displayLocationMaps"
+                 type="checkbox"
+                 defaultChecked={ UserSettingsStore.getSyncedSetting("displayLocationMaps", false) }
+                 onChange={ e => UserSettingsStore.setSyncedSetting("displayLocationMaps", e.target.checked) }
+          />
+          <label htmlFor="displayLocationMaps">
+              Display maps from Open Street Maps
+          </label>
+      </div>
     },
 
     _renderUrlPreviewSelector: function() {
