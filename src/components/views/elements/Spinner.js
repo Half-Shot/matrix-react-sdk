@@ -22,13 +22,20 @@ module.exports = React.createClass({
     displayName: 'Spinner',
 
     render: function() {
-        const w = this.props.w || 32;
-        const h = this.props.h || 32;
+        // You might get the lucky spinner.
+        const lucky = Math.floor(Math.random() * 10000);
+        let w = this.props.w || 32;
+        let h = this.props.h || 32;
+        if (lucky) {
+            w = w * 2;
+            h = h * 2;
+        }
         const imgClass = this.props.imgClassName || "";
+        const src = require(`../../../../res/img/spinner${lucky ? "_lucky" : ""}.gif`);
         return (
             <div className="mx_Spinner">
-                <img src={require("../../../../res/img/spinner.gif")} width={w} height={h} className={imgClass} />
+                <img src={src} width={w} height={h} className={imgClass} />
             </div>
-        );
+        )
     },
 });
